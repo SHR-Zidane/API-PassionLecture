@@ -1,0 +1,38 @@
+import express from "express";
+import cors from "cors";
+import "./db/sequelize";
+import User from "./models/User";
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.get("/users", async (req, res) => {
+  const users = await User.findAll();
+  res.json(users);
+});
+
+app.get("/users/:id", async (req, res) => {
+  const user = await User.findByPk(Number(req.params.id));
+  user ? res.json(user) : res.status(404).json({ error: "Not found" });
+});
+
+app.post("/users", async (req, res) => {
+  const user = await User.create(req.body);
+  res.json(user);
+});
+
+app.put("/users/:id", async (req, res) => {
+  const user = await User.findByPk(Number(req.params.id));
+  if (!user) return res.status(404).json({ error: "Not found" });
+  await user.update(req.body);
+  res.json(user);
+});
+
+app.delete("/users/:id", async (req, res) => {
+  await User.destroy({ where: { id: Number(req.params.id) } });
+  res.json({ success: true });
+});
+
+export default app;

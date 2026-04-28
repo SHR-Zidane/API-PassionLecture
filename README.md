@@ -27,4 +27,3 @@ Développement du backend d'une application de partage de lectures réalisée da
 ## Auteurs
 * GCR et AMG (Auteurs du cahier des charges).
 * Par **Erdem** et **Zidane**
-```
