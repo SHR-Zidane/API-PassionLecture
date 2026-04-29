@@ -13,6 +13,7 @@ export const up: Migration = async ({ context: sequelize }) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     
     created_at: {
