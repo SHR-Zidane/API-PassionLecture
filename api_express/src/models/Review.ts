@@ -62,6 +62,6 @@ export default class Review extends Model<
   @Column({ type: DataType.BIGINT })
   declare book_id: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => Book)
   declare book: Book;
 }
