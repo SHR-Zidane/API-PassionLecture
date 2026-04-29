@@ -7,7 +7,15 @@
     "start": "node dist/index.js",
     "dev": "tsc-watch --onsuccess \"node dist/index.js\"",
     "migrate": "node migrate up",
-    "migrate:down": "node migrate down"
+    "migrate:down": "node migrate down",
+    "migrate:status": "node migrate status",
+    "migrate:reset": "node migrate down --step 99 && node migrate up",
+    "migrate:create": "sequelize-cli migration:generate --name",
+    "db:drop": "mysqladmin -u root -proot drop db_api",
+    "db:create": "mysqladmin -u root -proot create db_api",
+    "db:rebuild": "npm run db:drop && npm run db:create && npm run migrate",
+    "clean": "rm -rf dist",
+    "prod": "npm run clean && npm run build && npm run start"
   },
   "dependencies": {
     "cors": "^2.8.6",

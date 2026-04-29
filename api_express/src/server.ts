@@ -8,6 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", async (req, res) => {
+  res.send("La meilleure API créée par Erdem et Zidane");
+});
+
 app.get("/users", async (req, res) => {
   const users = await User.findAll();
   res.json(users);
@@ -15,7 +19,7 @@ app.get("/users", async (req, res) => {
 
 app.get("/users/:id", async (req, res) => {
   const user = await User.findByPk(Number(req.params.id));
-  user ? res.json(user) : res.status(404).json({ error: "Not found" });
+  user ? res.json(user) : res.status(404).send("User not found");
 });
 
 app.post("/users", async (req, res) => {
@@ -25,7 +29,7 @@ app.post("/users", async (req, res) => {
 
 app.put("/users/:id", async (req, res) => {
   const user = await User.findByPk(Number(req.params.id));
-  if (!user) return res.status(404).json({ error: "Not found" });
+  if (!user) return res.status(404).send("User not found");
   await user.update(req.body);
   res.json(user);
 });

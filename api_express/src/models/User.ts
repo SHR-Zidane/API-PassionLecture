@@ -32,7 +32,20 @@ export default class User extends Model<
   @AllowNull(false)
   @Unique
   @Column
-  declare name: string;
+  declare username: string;
+
+  @AllowNull(false)
+  @Unique
+  @Column
+  declare email: string;
+  
+  @AllowNull(false)
+  @Column
+  declare password: string;
+  
+  @CreatedAt
+  declare join_date: CreationOptional<Date>;
+
 
   @CreatedAt
   declare created_at: CreationOptional<Date>;
