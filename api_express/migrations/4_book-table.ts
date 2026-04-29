@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
-import type { Migration } from "../../umzug";
+import type { Migration } from "../umzug";
 
 export const up: Migration = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().createTable("books", {
@@ -25,7 +25,7 @@ export const up: Migration = async ({ context: sequelize }) => {
     },
     extract_pdf: {
       type: DataTypes.BLOB,
-      allowNull: false,
+      allowNull: true,
     },
     publisher: {
       type: DataTypes.STRING,
@@ -37,7 +37,7 @@ export const up: Migration = async ({ context: sequelize }) => {
     },
     cover_image: {
       type: DataTypes.BLOB,
-      allowNull: false,
+      allowNull: true,
     },
     
     userId: {

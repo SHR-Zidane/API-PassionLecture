@@ -1,3 +1,3 @@
 require("ts-node/register");
 
-require("./src/umzug").migrator.runAsCLI();
+require("./umzug").migrator.runAsCLI();

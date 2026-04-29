@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import "./db/sequelize";
+import "./sequelize";
 import User from "./models/User";
 
 const app = express();

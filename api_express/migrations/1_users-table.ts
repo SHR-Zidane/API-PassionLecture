@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
-import type { Migration } from "../../umzug";
+import type { Migration } from "../umzug";
 
 export const up: Migration = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().createTable("users", {
@@ -31,6 +31,12 @@ export const up: Migration = async ({ context: sequelize }) => {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+    },
+    
+    is_admin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     
     

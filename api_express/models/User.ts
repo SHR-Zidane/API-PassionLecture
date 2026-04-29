@@ -50,6 +50,9 @@ export default class User extends Model<
   @CreatedAt
   declare join_date: CreationOptional<Date>;
   
+  @Column
+  declare is_admin: boolean;
+  
   @HasMany(() => Book)
   declare books: Book[];
 

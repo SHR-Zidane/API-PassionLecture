@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import { Options } from "sequelize";
-import config from "../config";
+import config from "./config";
 
 const sequelize = new Sequelize({
   ...(config.db as Options),

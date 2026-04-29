@@ -50,7 +50,7 @@ export default class Book extends Model<
   @Column
   declare page_count: number;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column(DataType.BLOB)
   declare extract_pdf: Buffer;
 
@@ -86,7 +86,7 @@ export default class Book extends Model<
   @BelongsTo(() => Category)
   declare category: Category;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column(DataType.BLOB)
   declare cover_image: Buffer;
 

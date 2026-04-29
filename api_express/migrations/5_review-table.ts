@@ -1,23 +1,44 @@
 import { DataTypes, Sequelize } from 'sequelize';
-import type { Migration } from '../../umzug';
+import type { Migration } from '../umzug';
 
 export const up: Migration = async ({ context: sequelize }) => {
-  await sequelize.getQueryInterface().createTable('authors', {
+  await sequelize.getQueryInterface().createTable('reviews', {
     id: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    first_name: {
+    rating: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+      unique: false,
+    },
+    comment: {
       type: DataTypes.STRING,
+      allowNull: true,
+      unique: false,
+    },
+    published_at: {
+      type: DataTypes.DATE,
       allowNull: false,
       unique: false,
     },
-    last_name: {
-      type: DataTypes.STRING,
+    userId: {
+      type: DataTypes.BIGINT,
       allowNull: false,
-      unique: false,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    },
+    bookId: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      references: {
+        model: 'books',
+        key: 'id',
+      },
     },
     created_at: {
       type: DataTypes.DATE,
@@ -33,5 +54,5 @@ export const up: Migration = async ({ context: sequelize }) => {
 };
 
 export const down: Migration = async ({ context: sequelize }) => {
-  await sequelize.getQueryInterface().dropTable('authors');
+  await sequelize.getQueryInterface().dropTable('reviews');
 };
