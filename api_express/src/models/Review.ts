@@ -12,7 +12,11 @@ import {
   Table,
   Unique,
   UpdatedAt,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
+import User from './User';
+import Book from './Book';
 
 @Table({
   tableName: 'review',
@@ -46,4 +50,18 @@ export default class Review extends Model<
 
   @UpdatedAt
   declare updated_at: CreationOptional<Date>;
+
+  @ForeignKey(() => User)
+  @Column({ type: DataType.BIGINT })
+  declare user_id: number;
+
+  @BelongsTo(() => User)
+  declare user: User;
+
+  @ForeignKey(() => Book)
+  @Column({ type: DataType.BIGINT })
+  declare book_id: number;
+
+  @BelongsTo(() => User)
+  declare book: Book;
 }
