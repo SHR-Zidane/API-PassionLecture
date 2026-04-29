@@ -18,9 +18,9 @@ import {
   tableName: "categories",
   modelName: "Category",
 })
-export default class User extends Model<
-  InferAttributes<User>,
-  InferCreationAttributes<User>
+export default class Category extends Model<
+  InferAttributes<Category>,
+  InferCreationAttributes<Category>
 > {
   @Column({
     primaryKey: true,
@@ -33,6 +33,7 @@ export default class User extends Model<
   @Unique
   @Column
   declare name: string;
+  
 
   @CreatedAt
   declare created_at: CreationOptional<Date>;

@@ -2,7 +2,7 @@ import { DataTypes, Sequelize } from 'sequelize';
 import type { Migration } from '../../umzug';
 
 export const up: Migration = async ({ context: sequelize }) => {
-  await sequelize.getQueryInterface().createTable('users', {
+  await sequelize.getQueryInterface().createTable('authors', {
     id: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -33,5 +33,5 @@ export const up: Migration = async ({ context: sequelize }) => {
 };
 
 export const down: Migration = async ({ context: sequelize }) => {
-  await sequelize.getQueryInterface().dropTable('users');
+  await sequelize.getQueryInterface().dropTable('authors');
 };

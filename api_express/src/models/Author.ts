@@ -15,7 +15,7 @@ import {
 } from 'sequelize-typescript';
 
 @Table({
-  tableName: 'author',
+  tableName: 'authors',
   modelName: 'Author',
 })
 export default class Author extends Model<

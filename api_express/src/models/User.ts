@@ -45,6 +45,7 @@ export default class User extends Model<
   
   @CreatedAt
   declare join_date: CreationOptional<Date>;
+  
 
 
   @CreatedAt
