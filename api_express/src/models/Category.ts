@@ -12,7 +12,9 @@ import {
   Table,
   Unique,
   UpdatedAt,
+  HasMany,
 } from "sequelize-typescript";
+import Book from './Book';
 
 @Table({
   tableName: "categories",
@@ -34,6 +36,8 @@ export default class Category extends Model<
   @Column
   declare name: string;
   
+  @HasMany(() => Book)
+  declare books: Book[];
 
   @CreatedAt
   declare created_at: CreationOptional<Date>;

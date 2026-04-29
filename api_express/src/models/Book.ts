@@ -20,6 +20,7 @@ import {
 import User from "./User";
 import Author from "./Author";
 import Category from "./Category";
+import Review from "./Review";
 
 @Table({
   tableName: "books",
@@ -88,6 +89,9 @@ export default class Book extends Model<
   @AllowNull(false)
   @Column(DataType.BLOB)
   declare cover_image: Buffer;
+
+  @HasMany(() => Review)
+  declare reviews: Review[];
 
   @CreatedAt
   declare created_at: CreationOptional<Date>;

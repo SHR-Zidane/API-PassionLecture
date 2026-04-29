@@ -12,7 +12,11 @@ import {
   Table,
   Unique,
   UpdatedAt,
+  HasMany
 } from "sequelize-typescript";
+import Book from './Book';
+import Review from './Review';
+
 
 @Table({
   tableName: "users",
@@ -46,8 +50,12 @@ export default class User extends Model<
   @CreatedAt
   declare join_date: CreationOptional<Date>;
   
+  @HasMany(() => Book)
+  declare books: Book[];
 
-
+  @HasMany(() => Review)
+  declare reviews: Review[];
+  
   @CreatedAt
   declare created_at: CreationOptional<Date>;
 
