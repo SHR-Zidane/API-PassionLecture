@@ -19,7 +19,7 @@ import User from './User';
 import Book from './Book';
 
 @Table({
-  tableName: 'review',
+  tableName: 'reviews',
   modelName: 'Review',
 })
 export default class Review extends Model<
@@ -53,14 +53,14 @@ export default class Review extends Model<
 
   @ForeignKey(() => User)
   @Column({ type: DataType.BIGINT })
-  declare user_id: number;
+  declare userId: number;
 
   @BelongsTo(() => User)
   declare user: User;
 
   @ForeignKey(() => Book)
   @Column({ type: DataType.BIGINT })
-  declare book_id: number;
+  declare bookId: number;
 
   @BelongsTo(() => Book)
   declare book: Book;

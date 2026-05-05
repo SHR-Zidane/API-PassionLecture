@@ -4,6 +4,8 @@ import "./sequelize";
 import User from "./models/User";
 import categoryRoutes from "./routes/categoryRoutes";
 import authorRoutes from "./routes/authorRoutes";
+import booksRoutes from "./routes/bookRoutes";
+import reviewRoutes from "./routes/reviewRoutes";
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.get("/", async (req, res) => {
 
 app.use("/api/categories", categoryRoutes);
 app.use("/api/authors", authorRoutes);
+app.use("/api/books", booksRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 
 

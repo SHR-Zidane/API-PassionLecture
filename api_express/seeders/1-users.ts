@@ -1,6 +1,5 @@
 "use strict";
 
-declare const module: any;
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
