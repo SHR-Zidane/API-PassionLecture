@@ -16,7 +16,7 @@ export const migrator = new Umzug({
 
 export const seeder = new Umzug({
   migrations: {
-    glob: ["seeders/*.js", { cwd: __dirname }],
+    glob: ["seeders/*.ts", { cwd: __dirname }],
     resolve: ({ name, path, context }) => {
       const seederFile = require(path as string);
       return {

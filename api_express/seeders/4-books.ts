@@ -1,10 +1,8 @@
 "use strict";
 
-const { title } = require('node:process');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface: any, Sequelize: any) {
     await queryInterface.bulkInsert(
       "books",
       [
@@ -49,7 +47,7 @@ module.exports = {
     );
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface: any, Sequelize: any) {
     await queryInterface.bulkDelete("books", null, {});
   },
 };

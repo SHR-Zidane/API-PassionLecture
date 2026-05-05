@@ -7,6 +7,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["src/**/*", "models", "migrations", "seeders", "sequelize.ts"],
-  "exclude": ["src/umzug.ts", "migrations/**/*"]
+  "include": ["**/*.ts", "migrate.js", "seed.js"],
+  "exclude": ["node_modules", "dist", "migrations/**/*", "seeders/**/*"]
 }

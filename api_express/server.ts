@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import "./sequelize";
 import User from "./models/User";
+import categoryRoutes from "./routes/categoryRoutes";
+import authorRoutes from "./routes/authorRoutes";
 
 const app = express();
 
@@ -11,6 +13,11 @@ app.use(express.json());
 app.get("/", async (req, res) => {
   res.send("La meilleure API créée par Erdem et Zidane");
 });
+
+app.use("/api/categories", categoryRoutes);
+app.use("/api/authors", authorRoutes);
+
+
 
 app.get("/users", async (req, res) => {
   const users = await User.findAll();

@@ -1,11 +1,11 @@
 {
   "name": "api-express-template",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "dist/index.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "tsc-watch --onsuccess \"node dist/index.js\"",
+    "start": "node dist/index.ts",
+    "dev": "tsc-watch --onsuccess \"node dist/index.ts\"",
     "migrate": "node migrate up",
     "migrate:down": "node migrate down",
     "migrate:status": "node migrate status",
@@ -14,11 +14,12 @@
     "seed": "node seed up",
     "seed:down": "node seed down",
     "seed:status": "node seed status",
-    "db:drop": "mysqladmin -u root -proot drop db_api",
-    "db:create": "mysqladmin -u root -proot create db_api",
+    "db:drop": "docker exec -it mysql_db mysql -u root -proot -e 'DROP DATABASE db_api;'",
+    "db:create": "docker exec -it mysql_db mysql -u root -proot -e 'CREATE DATABASE db_api;'",
     "db:rebuild": "npm run db:drop && npm run db:create && npm run migrate",
     "clean": "rm -rf dist",
-    "prod": "npm run clean && npm run build && npm run start"
+    "prod": "npm run clean && npm run build && npm run start",
+    "db:rebuild:seed": "echo supression de la db, création de la db, migration, seed && npm run db:rebuild && npm run seed"
   },
   "dependencies": {
     "cors": "^2.8.6",
