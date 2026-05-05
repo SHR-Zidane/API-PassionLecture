@@ -6,13 +6,18 @@ import categoryRoutes from "./routes/categoryRoutes";
 import authorRoutes from "./routes/authorRoutes";
 import booksRoutes from "./routes/bookRoutes";
 import reviewRoutes from "./routes/reviewRoutes";
+import userRoutes from "./routes/userRoutes";
 
 const app = express();
+
+const morgan = require('morgan');
+
+app.use(morgan('dev'));
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/", async (req, res) => {
+app.get("/api", async (req, res) => {
   res.send("La meilleure API créée par Erdem et Zidane");
 });
 
@@ -20,10 +25,10 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/authors", authorRoutes);
 app.use("/api/books", booksRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/users", userRoutes);
 
 
-
-app.get("/users", async (req, res) => {
+app.get("/api/users", async (req, res) => {
   const users = await User.findAll();
   res.json(users);
 });

@@ -23,6 +23,7 @@ export const up: Migration = async ({ context: sequelize }) => {
       type: DataTypes.DATE,
       allowNull: false,
       unique: false,
+      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
     },
     userId: {
       type: DataTypes.BIGINT,

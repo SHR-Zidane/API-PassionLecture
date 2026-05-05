@@ -1,33 +1,36 @@
 import { Request, Response } from 'express';
 import Review from '../models/Review';
+import { DatabaseSync } from 'node:sqlite';
 
 // get tous les reviews
 export const getReviews = async (req: Request, res: Response) => {
     try {
-        const reviews = await Review.findAndCountAll();
-        return res.status(200).json({
+        const reviews = await Review.findAndCountAll({
+            include: ['user', 'book']
+        });
+        return res.json({
             error: false,
             result: reviews
         });
     } catch (error: any) {
         console.error(error);
-        return res.status(500).json({
+        return res.json({
             error: true,
             message: error.message || 'Internal Server Error'
         });
     }
-};
+}
 
 // create une review
 export const createReview = async (req: Request, res: Response) => {
     try {
         const review = await Review.create(req.body);
-        return res.status(201).json({
+        return res.json({
             error: false,
             result: review
         });
     } catch (error: any) {
-        return res.status(400).json({
+        return res.json({
             error: true,
             message: error.message
         });
@@ -37,16 +40,27 @@ export const createReview = async (req: Request, res: Response) => {
 // get une review
 export const getReview = async (req: Request, res: Response) => {
     const reviewId = Number(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
-    const review = await Review.findByPk(reviewId);
+    const review = await Review.findByPk(reviewId, {
+        include: ['user', 'book']
+    });
     if (!review) {
-        return res.status(404).json({
+        return res.json({
             error: true,
             message: 'Review not found'
         });
     }
-    res.status(200).json({
+    res.json({
         error: false,
-        result: review
+        result: {
+            id: review.id,
+            rating: review.rating,
+            comment: review.comment,
+            published_at: review.published_at,
+            user: review.user,
+            book: review.book,
+            created_at: review.created_at,
+            updated_at: review.updated_at
+        }
     });
 };
 
@@ -56,13 +70,13 @@ export const updateReview = async (req: Request, res: Response) => {
     const reviewId = Number(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
     const review = await Review.findByPk(reviewId);
     if (!review) {
-        return res.status(404).json({
+        return res.json({
             error: true,
             message: 'Review not found'
         });
     }
     await review.update(req.body);
-    res.status(200).json({
+    res.json({
         error: false,
         result: review
     });
@@ -73,13 +87,13 @@ export const deleteReview = async (req: Request, res: Response) => {
     const reviewId = Number(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
     const review = await Review.findByPk(reviewId);
     if (!review) {
-        return res.status(404).json({
+        return res.json({
             error: true,
             message: 'Review not found'
         });
     }
     await review.destroy();
-    res.status(204).json({
+    res.json({
         error: false,
         message: 'Review deleted'
     });

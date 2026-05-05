@@ -4,7 +4,7 @@ import Category from '../models/Category';
 // get tous les catégories
 export const getCategories = async (req: Request, res: Response) => {
     const categories = await Category.findAndCountAll();
-    res.status(200).json({
+    res.json({
         error: false,
         result: categories
     });
@@ -15,12 +15,12 @@ export const getCategory = async (req: Request, res: Response) => {
     const categoryId = Number(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
     const category = await Category.findByPk(categoryId);
     if (!category) {
-        return res.status(404).json({
+        return res.json({
             error: true,
             message: 'Category not found'
         });
     }
-    res.status(200).json({
+    res.json({
         error: false,
         result: category
     });
@@ -29,7 +29,7 @@ export const getCategory = async (req: Request, res: Response) => {
 // create une catégorie
 export const createCategory = async (req: Request, res: Response) => {
     const category = await Category.create(req.body);
-    res.status(201).json({
+    res.json({
         error: false,
         result: category
     });
@@ -40,13 +40,13 @@ export const updateCategory = async (req: Request, res: Response) => {
     const categoryId = Number(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
     const category = await Category.findByPk(categoryId);
     if (!category) {
-        return res.status(404).json({
+        return res.json({
             error: true,
             message: 'Category not found'
         });
     }
     await category.update(req.body);
-    res.status(200).json({
+    res.json({
         error: false,
         result: category
     });
@@ -57,13 +57,13 @@ export const deleteCategory = async (req: Request, res: Response) => {
     const categoryId = Number(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
     const category = await Category.findByPk(categoryId);
     if (!category) {
-        return res.status(404).json({
+        return res.json({
             error: true,
             message: 'Category not found'
         });
     }
     await category.destroy();
-    res.status(204).json({
+    res.json({
         error: false,
         message: 'Category deleted'
     });
