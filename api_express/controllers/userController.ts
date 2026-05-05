@@ -72,19 +72,28 @@ export const updateUser = async (req: Request, res: Response) => {
 
 // delete un user
 export const deleteUser = async (req: Request, res: Response) => {
-    const userId = Number(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
-    const user = await User.findByPk(userId);
-    if (!user) {
-        return res.status(404).json({
+    try {
+        const userId = Number(req.params.id);
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                error: true,
+                message: 'User not found'
+            });
+        }
+
+        await user.destroy();
+        
+        return res.json({
+            error: false,
+            message: 'User deleted'
+        });
+    } catch (error: any) {
+        console.error("ERREUR DELETE:", error); 
+        return res.status(500).json({
             error: true,
-            message: 'User not found'
+            message: error.message
         });
     }
-    await user.destroy();
-    res.json({
-        error: false,
-        message: 'User deleted'
-    });
-
 };
-

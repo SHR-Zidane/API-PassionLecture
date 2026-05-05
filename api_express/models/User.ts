@@ -53,10 +53,16 @@ export default class User extends Model<
   @Column
   declare is_admin: boolean;
   
-  @HasMany(() => Book)
+  @HasMany(() => Book, {
+    onDelete: 'CASCADE',
+    hooks: true
+  })
   declare books: Book[];
 
-  @HasMany(() => Review)
+  @HasMany(() => Review, {
+    onDelete: 'CASCADE',
+    hooks: true
+  })
   declare reviews: Review[];
   
   @CreatedAt
