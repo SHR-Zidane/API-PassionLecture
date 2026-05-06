@@ -15,6 +15,7 @@ import {
   ForeignKey,
   BelongsTo,
   HasMany,
+  Default,
 } from "sequelize-typescript";
 
 import User from "./User";
@@ -38,32 +39,47 @@ export default class Book extends Model<
   declare id: CreationOptional<number>;
 
   @AllowNull(false)
-  @Unique
   @Column
   declare title: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
+  @Default(null)
   @Column
   declare summary: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
+  @Default(null)
   @Column
   declare page_count: number;
 
   @AllowNull(true)
+  @Default(null)
   @Column(DataType.BLOB)
   declare extract_pdf: Buffer;
 
-  @AllowNull(false)
+  @AllowNull(true)
+  @Default(null)
   @Column
   declare publisher: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
+  @Default(null)
   @Column
   declare edition_year: number;
 
+  @AllowNull(true)
+  @Default(null)
+  @Column(DataType.BLOB)
+  declare cover_image: Buffer;
+
+  @AllowNull(true)
+  @Default(null)
+  @Column(DataType.STRING)
+  declare epubPath: string;
+
   @ForeignKey(() => User)
-  @AllowNull(false)
+  @AllowNull(true)
+  @Default(null)
   @Column(DataType.BIGINT)
   declare userId: number;
 
@@ -71,7 +87,8 @@ export default class Book extends Model<
   declare user: User;
 
   @ForeignKey(() => Author)
-  @AllowNull(false)
+  @AllowNull(true)
+  @Default(null)
   @Column(DataType.BIGINT)
   declare authorId: number;
 
@@ -79,16 +96,13 @@ export default class Book extends Model<
   declare author: Author;
 
   @ForeignKey(() => Category)
-  @AllowNull(false)
+  @AllowNull(true)
+  @Default(null)
   @Column(DataType.BIGINT)
   declare categoryId: number;
 
   @BelongsTo(() => Category)
   declare category: Category;
-
-  @AllowNull(true)
-  @Column(DataType.BLOB)
-  declare cover_image: Buffer;
 
   @HasMany(() => Review)
   declare reviews: Review[];

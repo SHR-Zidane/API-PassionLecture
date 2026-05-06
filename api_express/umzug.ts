@@ -27,7 +27,7 @@ export const seeder = new Umzug({
     },
   },
   context: sequelize.getQueryInterface(),
-  storage: new SequelizeStorage({ sequelize, modelName: "SequelizeData" }), // Table séparée
+  storage: new SequelizeStorage({ sequelize, modelName: "SequelizeData" }),
   logger: console,
 });
 

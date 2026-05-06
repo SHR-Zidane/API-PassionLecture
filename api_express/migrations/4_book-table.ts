@@ -5,7 +5,7 @@ export const up: Migration = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().createTable("books", {
     id: {
       type: DataTypes.BIGINT,
-      allowNull: false,
+      allowNull: true,
       primaryKey: true,
       autoIncrement: true,
     },
@@ -13,56 +13,69 @@ export const up: Migration = async ({ context: sequelize }) => {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     summary: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
     page_count: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
     extract_pdf: {
       type: DataTypes.BLOB,
       allowNull: true,
+      defaultValue: null,
     },
     publisher: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
     edition_year: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
     cover_image: {
       type: DataTypes.BLOB,
       allowNull: true,
+      defaultValue: null,
+    },
+    epubPath: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
     },
     
     userId: {
       type: DataTypes.BIGINT,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "users",
         key: "id",
       },
+      defaultValue: null,
     },
     authorId: {
       type: DataTypes.BIGINT,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "authors",
         key: "id",
       },
+      defaultValue: null,
     },
     categoryId: {
       type: DataTypes.BIGINT,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "categories",
         key: "id",
       },
+      defaultValue: null,
     },
     
     created_at: {
