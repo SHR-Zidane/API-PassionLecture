@@ -25,7 +25,7 @@ export const up: Migration = async ({ context: sequelize }) => {
       defaultValue: null,
     },
     extract_pdf: {
-      type: DataTypes.BLOB,
+      type: DataTypes.STRING,
       allowNull: true,
       defaultValue: null,
     },
@@ -40,7 +40,7 @@ export const up: Migration = async ({ context: sequelize }) => {
       defaultValue: null,
     },
     cover_image: {
-      type: DataTypes.BLOB,
+      type: DataTypes.STRING,
       allowNull: true,
       defaultValue: null,
     },

@@ -6,14 +6,16 @@ import authorRoutes from "./routes/authorRoutes";
 import booksRoutes from "./routes/bookRoutes";
 import reviewRoutes from "./routes/reviewRoutes";
 import userRoutes from "./routes/userRoutes";
+import { globalLimiter } from "./middleware/rateLimiter";
 
 const app = express();
 const cors = require('cors');
-const multer = require('multer');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+app.use(globalLimiter);
 
 app.use(express.static('public'));
 

@@ -54,8 +54,8 @@ export default class Book extends Model<
 
   @AllowNull(true)
   @Default(null)
-  @Column(DataType.BLOB)
-  declare extract_pdf: Buffer;
+  @Column(DataType.STRING)
+  declare extract_pdf: string;
 
   @AllowNull(true)
   @Default(null)
@@ -69,8 +69,8 @@ export default class Book extends Model<
 
   @AllowNull(true)
   @Default(null)
-  @Column(DataType.BLOB)
-  declare cover_image: Buffer;
+  @Column(DataType.STRING)
+  declare cover_image: string;
 
   @AllowNull(true)
   @Default(null)
