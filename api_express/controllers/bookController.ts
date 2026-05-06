@@ -36,40 +36,34 @@ export const getBook = async (req: Request, res: Response) => {
 // Create un book
 export const createBook = async (req: Request, res: Response) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ error: true, message: 'No file uploaded' });
+        const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+        if (!files || !files['epub']) {
+            return res.status(400).json({ error: true, message: 'L’epub est obligatoire' });
         }
 
-        const { title, authorId, categoryId, summary, page_count, extract_pdf, publisher, edition_year, cover_image, userId } = req.body;
-        const epubPath = path.join('public', 'epub', req.file.filename);
+        const { title, authorId, categoryId, summary, page_count, publisher, edition_year, userId } = req.body;
 
-        console.log(req.body);
-        console.log(req.file);
+        const epubPath = files['epub'][0].filename;
+        const coverImage = files['cover_image'] ? files['cover_image'][0].filename : null;
+        const extractPdf = files['extract_pdf'] ? files['extract_pdf'][0].filename : null;
+
         const book = await Book.create({
             title,
             summary,
             page_count,
-            extract_pdf,
             publisher,
             edition_year,
-            cover_image,
-            epubPath: req.file.filename,
+            epubPath,
+            cover_image: coverImage, 
+            extract_pdf: extractPdf,
             userId,
             authorId,
             categoryId,
         } as any);
 
-        return res.status(201).json({
-            error: false,
-            result: book
-        });
+        return res.status(201).json({ error: false, result: book });
 
-        // const book = await Book.create(req.body);
-        // 
-        // return res.status(201).json({
-        //     error: false,
-        //     result: book
-        // });
     } catch (error: any) {
         return res.status(500).json({ error: true, message: error.message });
     }
