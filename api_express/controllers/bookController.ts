@@ -3,7 +3,7 @@ import { spawn } from 'child_process';
 import multer from 'multer';
 import path from 'path';
 import Book from '../models/Book';
-
+import Author from '../models/Author';
 // Get tous les books
 export const getBooks = async (req: Request, res: Response) => {
     try {
@@ -67,47 +67,72 @@ export const createBook = async (req: Request, res: Response) => {
         
         const coverImage = files['cover_image'] ? files['cover_image'][0].filename : null;
         const extractPdf = files['extract_pdf'] ? files['extract_pdf'][0].filename : null;
+        const coverFolder = path.resolve('public/cover_image');
 
-        const pythonProcess = spawn('python', ['parser.py', epubPath]);
+        const pythonProcess = spawn('python', ['parser.py', epubPath, coverFolder]);
 
         let pythonData = "";
+        let pythonError = "";
 
         pythonProcess.stdout.on('data', (data) => {
             pythonData += data.toString();
         });
 
+        // Optionnel : on capture les erreurs python pour le log
+        pythonProcess.stderr.on('data', (data) => {
+            pythonError += data.toString();
+        });
+
         pythonProcess.on('close', async (code) => {
             if (code !== 0) {
-                console.error("Erreur script Python code:", code);
-                return res.status(500).json({ error: true, message: "Erreur lors de l’analyse du livre" });
+                console.error("Erreur Python:", pythonError);
             }
 
             try {
                 const extracted = pythonData ? JSON.parse(pythonData) : {};
+                
+                // 1. GESTION DE L'AUTEUR (Extraction et vérification)
+                let finalAuthorId = req.body.authorId || 1;
 
+                if (extracted.author) {
+                    const parts = extracted.author.split(' ');
+                    const firstName = parts[0] || 'Inconnu';
+                    const lastName = parts.slice(1).join(' ') || '';
+
+                    // findOrCreate cherche si l'auteur existe, sinon il le crée
+                    const [authorInstance] = await Author.findOrCreate({
+                        where: { first_name: firstName, last_name: lastName } as any,
+                        defaults: { first_name: firstName, last_name: lastName } as any
+                    });
+                    
+                    finalAuthorId = authorInstance.id;
+                }
+
+                // 2. CRÉATION DU LIVRE
                 const book = await Book.create({
                     title: extracted.title || req.body.title || 'Titre inconnu',
                     summary: extracted.summary || req.body.summary || null,
                     epubPath: epubFile.filename,
-                    cover_image: coverImage, 
+                    cover_image: extracted.cover_image || coverImage,
                     extract_pdf: extractPdf,
+                    authorId: finalAuthorId,
+                    categoryId: req.body.categoryId || 1,
+                    userId: req.body.userId || null,
                     page_count: req.body.page_count || null,
                     publisher: req.body.publisher || null,
                     edition_year: req.body.edition_year || null,
-                    userId: req.body.userId || null,
-                    authorId: req.body.authorId || 1,
-                    categoryId: req.body.categoryId || 1,
                 } as any);
 
                 return res.status(201).json({ error: false, result: book });
 
             } catch (err) {
-                console.error("Erreur lors de la création en DB:", err);
-                return res.status(500).json({ error: true, message: "Erreur lors de l'enregistrement" });
+                console.error("Erreur détaillée lors de l'insertion :", err);
+                return res.status(500).json({ error: true, message: "Erreur lors du traitement final des données." });
             }
         });
 
     } catch (error: any) {
+        console.error("Erreur Controller:", error);
         return res.status(500).json({ error: true, message: error.message });
     }
 };
