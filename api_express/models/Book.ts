@@ -52,6 +52,11 @@ export default class Book extends Model<
   @Column
   declare page_count: number;
 
+  @AllowNull(false)
+  @Default(0)
+  @Column
+  declare last_read_page: number;
+
   @AllowNull(true)
   @Default(null)
   @Column(DataType.STRING)
@@ -76,6 +81,11 @@ export default class Book extends Model<
   @Default(null)
   @Column(DataType.STRING)
   declare epubPath: string;
+
+  @AllowNull(true)
+  @Default(null)
+  @Column(DataType.BLOB)
+  declare epub_content: Buffer;
 
   @ForeignKey(() => User)
   @AllowNull(true)

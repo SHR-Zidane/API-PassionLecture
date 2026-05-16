@@ -6,13 +6,32 @@ import Book from '../models/Book';
 // Get tous les books
 export const getBooks = async (req: Request, res: Response) => {
     try {
-        const books = await Book.findAndCountAll();
+        const books = await Book.findAndCountAll({
+            include: [
+                { 
+                    association: 'author', 
+                    attributes: ['id', 'first_name', 'last_name'] 
+                },
+                { 
+                    association: 'category', 
+                    attributes: ['id', 'name'] 
+                },
+            ],
+        });
         res.json({
             error: false,
             result: books
         });
     } catch (error: any) {
-        res.status(500).json({ error: true, message: error.message });
+    // Ça, ça va s'afficher sur ton PC, pas sur le téléphone
+    console.log("----- ERREUR DÉTAILLÉE -----");
+    console.error(error); 
+    console.log("----------------------------");
+
+    res.status(500).json({ 
+        error: true, 
+        message: error.message || "Erreur interne du serveur sans message" 
+    });
     }
 };
 
