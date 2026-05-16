@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { spawn } from 'child_process';
 import multer from 'multer';
 import path from 'path';
 import Book from '../models/Book';
@@ -61,27 +62,50 @@ export const createBook = async (req: Request, res: Response) => {
             return res.status(400).json({ error: true, message: 'L’epub est obligatoire' });
         }
 
-        const { title, authorId, categoryId, summary, page_count, publisher, edition_year, userId } = req.body;
-
-        const epubPath = files['epub'][0].filename;
+        const epubFile = files['epub'][0];
+        const epubPath = path.resolve(epubFile.path);
+        
         const coverImage = files['cover_image'] ? files['cover_image'][0].filename : null;
         const extractPdf = files['extract_pdf'] ? files['extract_pdf'][0].filename : null;
 
-        const book = await Book.create({
-            title,
-            summary,
-            page_count,
-            publisher,
-            edition_year,
-            epubPath,
-            cover_image: coverImage, 
-            extract_pdf: extractPdf,
-            userId,
-            authorId,
-            categoryId,
-        } as any);
+        const pythonProcess = spawn('python', ['parser.py', epubPath]);
 
-        return res.status(201).json({ error: false, result: book });
+        let pythonData = "";
+
+        pythonProcess.stdout.on('data', (data) => {
+            pythonData += data.toString();
+        });
+
+        pythonProcess.on('close', async (code) => {
+            if (code !== 0) {
+                console.error("Erreur script Python code:", code);
+                return res.status(500).json({ error: true, message: "Erreur lors de l’analyse du livre" });
+            }
+
+            try {
+                const extracted = pythonData ? JSON.parse(pythonData) : {};
+
+                const book = await Book.create({
+                    title: extracted.title || req.body.title || 'Titre inconnu',
+                    summary: extracted.summary || req.body.summary || null,
+                    epubPath: epubFile.filename,
+                    cover_image: coverImage, 
+                    extract_pdf: extractPdf,
+                    page_count: req.body.page_count || null,
+                    publisher: req.body.publisher || null,
+                    edition_year: req.body.edition_year || null,
+                    userId: req.body.userId || null,
+                    authorId: req.body.authorId || 1,
+                    categoryId: req.body.categoryId || 1,
+                } as any);
+
+                return res.status(201).json({ error: false, result: book });
+
+            } catch (err) {
+                console.error("Erreur lors de la création en DB:", err);
+                return res.status(500).json({ error: true, message: "Erreur lors de l'enregistrement" });
+            }
+        });
 
     } catch (error: any) {
         return res.status(500).json({ error: true, message: error.message });
