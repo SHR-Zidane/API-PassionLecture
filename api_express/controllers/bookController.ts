@@ -40,7 +40,20 @@ export const getBooks = async (req: Request, res: Response) => {
 export const getBook = async (req: Request, res: Response) => {
     try {
         const bookId = (Array.isArray(req.params.id) ? req.params.id[0] : req.params.id) as string;
-        const book = await Book.findByPk(bookId);
+        
+        // On ajoute l'include ici aussi pour récupérer l'auteur et la catégorie
+        const book = await Book.findByPk(bookId, {
+            include: [
+                { 
+                    association: 'author', 
+                    attributes: ['id', 'first_name', 'last_name'] 
+                },
+                { 
+                    association: 'category', 
+                    attributes: ['id', 'name'] 
+                },
+            ],
+        });
 
         if (!book) {
             return res.status(404).json({ error: true, message: 'Book not found' });
