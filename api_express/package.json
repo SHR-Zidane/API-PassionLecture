@@ -22,7 +22,7 @@
     "db:rebuild:seed": "echo supression de la db, création de la db, migration, seed && npm run db:rebuild && npm run seed"
   },
   "dependencies": {
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.0",
     "morgan": "^1.10.1",
